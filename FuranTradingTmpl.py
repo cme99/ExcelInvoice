@@ -1,5 +1,6 @@
 import re
 import CreateCustomExcel as ccx
+import ConvertDate as cd
 class FuranTradingTmpl():
     if __name__ == "__main__":
         print("Start Furan Trading Template")
@@ -97,10 +98,11 @@ def getDataFromFuranTrading(df, invoiceHeaderSheet, invoiceItem, i):
             invoiceItemSheet.write('F' + str(worksheetIndex), str(excelValues[startDescriptionIdx][unitPriceIdx])) 
             invoiceItemSheet.write('G' + str(worksheetIndex), str(round(excelValues[startDescriptionIdx][amountIdx], 2))) 
             worksheetIndex += 1  
-            startDescriptionIdx += 1  
+            startDescriptionIdx += 1 
+    
     invoiceHeaderSheet.write('A' + sheetRow, customerNo)
     invoiceHeaderSheet.write('B' + sheetRow, invNo)
-    invoiceHeaderSheet.write('C' + sheetRow, issueDate)
+    invoiceHeaderSheet.write('C' + sheetRow, cd.getIssueDateWithoutMonthName(issueDate))
     invoiceHeaderSheet.write('D' + sheetRow, total)
     invoiceHeaderSheet.write('E' + sheetRow, extendTotal)
     invoiceHeaderSheet.write('F' + sheetRow, grandTotal) 

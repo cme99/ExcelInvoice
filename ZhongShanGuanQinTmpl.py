@@ -1,5 +1,6 @@
 import re
 import CreateCustomExcel as ccx
+import ConvertDate as cd
 class ZhongShanGuanQinTmpl():
     if __name__ == "__main__":
         print("ZhongShanGuanQin")
@@ -101,7 +102,7 @@ def getDataFromZhongShanGuanQin(df, invoiceHeaderSheet, invoiceItem, i):
             startDescriptionIdx += 1
     invoiceHeaderSheet.write('A' + sheetRow, customerNo)
     invoiceHeaderSheet.write('B' + sheetRow, invNo)
-    invoiceHeaderSheet.write('C' + sheetRow, issueDate)
+    invoiceHeaderSheet.write('C' + sheetRow, cd.getIssueDateWithoutMonthName(issueDate))
     invoiceHeaderSheet.write('D' + sheetRow, total)
     invoiceHeaderSheet.write('E' + sheetRow, extendTotal)
     invoiceHeaderSheet.write('F' + sheetRow, grandTotal)

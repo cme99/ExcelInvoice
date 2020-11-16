@@ -1,5 +1,6 @@
 import re
 import CreateCustomExcel as ccx
+import ConvertDate as cd
 class WellfreshTmpl():
     if __name__ == "__main__":
         print("WELLFRESH CO.,LTD")
@@ -85,9 +86,10 @@ def getDataFromWellFresh(df, invoiceHeaderSheet, invoiceItem, i):
         startDescriptionIdx += 1
     total = str(round(excelValues[endDescriptionIdx][amountIdx], 2))
     grandTotal = total
+    
     invoiceHeaderSheet.write('A' + sheetRow, customerNo)
     invoiceHeaderSheet.write('B' + sheetRow, invNo)
-    invoiceHeaderSheet.write('C' + sheetRow, issueDate)
+    invoiceHeaderSheet.write('C' + sheetRow, cd.getIssueDateWithoutMonthName(issueDate))
     invoiceHeaderSheet.write('D' + sheetRow, total)
     invoiceHeaderSheet.write('E' + sheetRow, extendTotal)
     invoiceHeaderSheet.write('F' + sheetRow, grandTotal)

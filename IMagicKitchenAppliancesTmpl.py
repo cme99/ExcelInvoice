@@ -1,5 +1,6 @@
 import re
 import datetime
+import ConvertDate as cd
 import CreateCustomExcel as ccx
 class IMagicKitchenAppliancesTmpl():
     if __name__ == "__main__":
@@ -136,9 +137,10 @@ def getDataFromIMagicKitchenAppliances(df, invoiceHeaderSheet, invoiceItem, i):
         startDescriptionIdx += 1
     total = str(round(excelValues[endDescriptionIdx][amountIdx], 2))
     grandTotal = total
+
     invoiceHeaderSheet.write('A' + sheetRow, customerNo)
     invoiceHeaderSheet.write('B' + sheetRow, invNo)
-    invoiceHeaderSheet.write('C' + sheetRow, issueDate)
+    invoiceHeaderSheet.write('C' + sheetRow, cd.getIssueDateWithoutMonthName(issueDate))
     invoiceHeaderSheet.write('D' + sheetRow, total)
     invoiceHeaderSheet.write('E' + sheetRow, extendTotal)
     invoiceHeaderSheet.write('F' + sheetRow, grandTotal)        
