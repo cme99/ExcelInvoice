@@ -1,8 +1,10 @@
 import re
+import ConvertDate as cd
 import CreateCustomExcel as ccx
 class FoshanTiansiTmpl():
     if __name__ == "__main__":
         print("FoshanTiansi")
+
 
 def getDataFromFoshanTiansi(df, invoiceHeaderSheet, invoiceItem, i):
     
@@ -117,9 +119,11 @@ def getDataFromFoshanTiansi(df, invoiceHeaderSheet, invoiceItem, i):
                 worksheetIndex += 1
             # print(value)
             startDescriptionIdx += 1
+
+    
     invoiceHeaderSheet.write('A' + sheetRow, customerNo)
     invoiceHeaderSheet.write('B' + sheetRow, invNo)
-    invoiceHeaderSheet.write('C' + sheetRow, issueDate)
+    invoiceHeaderSheet.write('C' + sheetRow, cd.getIssueDate(issueDate))
     invoiceHeaderSheet.write('D' + sheetRow, total)
     invoiceHeaderSheet.write('E' + sheetRow, extendTotal)
     invoiceHeaderSheet.write('F' + sheetRow, grandTotal)

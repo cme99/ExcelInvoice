@@ -73,7 +73,7 @@ def initWorkBook():
     invoiceHeaderSheet.write("D1", "Total")
     invoiceHeaderSheet.write("E1", "Extend Total")
     invoiceHeaderSheet.write("F1", "Grand Total")
-    invoiceHeaderSheet.write("G1", "File name")
+    # invoiceHeaderSheet.write("G1", "File name")
     invoiceItem = xlsxwriter.Workbook("InvoiceItem.xlsx")
     return (invoiceHeader, invoiceHeaderSheet, invoiceItem)
 
@@ -91,7 +91,7 @@ if __name__ == "__main__":
             df = pd.read_excel(file_name) 
             excelType = getExcelTemplate(df.columns, types)
             goToFuncBasedOnExcelType(excelType, str(i))
-            invoiceHeaderSheet.write("G" + str(i), file_name)
+            # invoiceHeaderSheet.write("G" + str(i), file_name)
             i+=1
     # strPath = sys.argv[1]
     invoiceItem.close()

@@ -1,5 +1,6 @@
 import re
 import datetime
+import ConvertDate as cd
 import CreateCustomExcel as ccx
 class WellseeEnterpriseTmpl():
     if __name__ == "__main__":
@@ -115,9 +116,10 @@ def getDataFromWellseeEnterprise(df, invoiceHeaderSheet, invoiceItem, i):
         startDescriptionIdx += 1
     total = str(round(excelValues[endDescriptionIdx][amountIdx], 2))
     grandTotal = total
+    issueDate = issueDate.strip()
     invoiceHeaderSheet.write('A' + sheetRow, customerNo.strip())
     invoiceHeaderSheet.write('B' + sheetRow, invNo.strip())
-    invoiceHeaderSheet.write('C' + sheetRow, issueDate.strip())
+    invoiceHeaderSheet.write('C' + sheetRow, cd.getIssueDateWithoutMonthName(issueDate))
     invoiceHeaderSheet.write('D' + sheetRow, total)
     invoiceHeaderSheet.write('E' + sheetRow, extendTotal)
     invoiceHeaderSheet.write('F' + sheetRow, grandTotal)

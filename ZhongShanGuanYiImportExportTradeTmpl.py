@@ -1,5 +1,6 @@
 import re
 import CreateCustomExcel as ccx
+import ConvertDate as cd
 class ZhongShanGuanYiImportExportTradeTmpl():
     if __name__ == "__main__":
         print("Zhong Shan Guan Yi Import and Export Trade")
@@ -97,7 +98,7 @@ def getDataFromZhongShanGuanYiImportExportTrade(df, invoiceHeaderSheet, invoiceI
     grandTotal = total
     invoiceHeaderSheet.write('A' + sheetRow, customerNo.strip())
     invoiceHeaderSheet.write('B' + sheetRow, invNo.strip())
-    invoiceHeaderSheet.write('C' + sheetRow, issueDate.strip())
+    invoiceHeaderSheet.write('C' + sheetRow, cd.getIssueDate(issueDate.strip()))
     invoiceHeaderSheet.write('D' + sheetRow, total)
     invoiceHeaderSheet.write('E' + sheetRow, extendTotal)
     invoiceHeaderSheet.write('F' + sheetRow, grandTotal)
