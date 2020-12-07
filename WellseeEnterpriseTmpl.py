@@ -65,6 +65,17 @@ def getDataFromWellseeEnterprise(df, invoiceHeaderSheet, invoiceItem, i):
                     invNo = str(excelValues[indexRow][i+1])
                     break
                 i += 1
+    
+        
+        if re.search(r'(?<=Buyer\'s order no.\s).*(?=\")', info) != None:
+           infoStr = re.findall(r'(?<=Buyer\'s order no.\s).*(?=\")', info)[0]
+           infos = re.findall(r'[^\+]+', infoStr)
+           i = 0
+           while i < len(infos):
+                if re.search(r'(?<=\/)\d+', infos[i]) != None:
+                    poNo = re.findall(r'(?<=\/)\d+', infos[i])[0].strip()
+                i+=1
+
         if re.search(r'ITEM#', info) != None and re.search(r'Q\'TY', info) != None and re.search(r'UNIT', info) != None and re.search(r'PRICE US\$', info) != None and re.search(r'AMOUNT US\$', info) != None and isStartDescription == False:
             isStartDescription = True
             startDescriptionIdx = indexRow + 1
@@ -89,14 +100,16 @@ def getDataFromWellseeEnterprise(df, invoiceHeaderSheet, invoiceItem, i):
 
         indexRow += 1
     (invoiceItem, invoiceItemSheet) = ccx.initSheet(invoiceItem, invNo.strip())
+    amount = 0
     while startDescriptionIdx < endDescriptionIdx:
         poStr = str(excelValues[startDescriptionIdx][poNoIdx])
         
-        if re.search(r'(?<=PO_IMP/|PO_SER/).\w+', poStr) != None:
-            info = re.findall(r'(?<=PO_IMP/|PO_SER/).\w+', poStr)
+        if re.search(r'(?<=PO_IMP/).\d+', poStr) != None:
+            info = re.findall(r'(?<=PO_IMP/).\d+', poStr)
             poNo = ', '.join(info).strip()
-        elif re.search(r'REPLACEMENT', poStr) !=None:
-            poNo = 'REPLACEMENT'
+            
+        elif re.search(r'REPLACEMENT|PO_SER/', poStr) !=None:
+            poNo = None
         else:  
             # print(poStr)
             if re.search(r'[0-9]+\.[0-9]+\.[0-9]+', poStr) != None:
@@ -104,15 +117,18 @@ def getDataFromWellseeEnterprise(df, invoiceHeaderSheet, invoiceItem, i):
                 articleNo = ''.join(re.findall(r'[0-9]+\.[0-9]+\.[0-9]+', poStr)).strip()
             else:
                 articleNo = poStr.split(' ')[0].strip()
-
-            invoiceItemSheet.write('A' + str(worksheetIndex), poNo)    
-            invoiceItemSheet.write('B' + str(worksheetIndex), str(worksheetIndex - 1)) 
-            invoiceItemSheet.write('C' + str(worksheetIndex), str(excelValues[startDescriptionIdx][qtyIdx]))
-            invoiceItemSheet.write('D' + str(worksheetIndex), str(excelValues[startDescriptionIdx][unitIdx])) 
-            invoiceItemSheet.write('E' + str(worksheetIndex), articleNo) 
-            invoiceItemSheet.write('F' + str(worksheetIndex), str(excelValues[startDescriptionIdx][unitPriceIdx]))
-            invoiceItemSheet.write('G' + str(worksheetIndex), str(excelValues[startDescriptionIdx][amountIdx])) 
-            worksheetIndex += 1
+            
+            if poNo !=None and articleNo != 'nan':
+                # print(str(excelValues[startDescriptionIdx][amountIdx]))
+                amount += int(excelValues[startDescriptionIdx][amountIdx])
+                invoiceItemSheet.write('A' + str(worksheetIndex), poNo)    
+                invoiceItemSheet.write('B' + str(worksheetIndex), str(worksheetIndex - 1)) 
+                invoiceItemSheet.write('C' + str(worksheetIndex), str(excelValues[startDescriptionIdx][qtyIdx]))
+                invoiceItemSheet.write('D' + str(worksheetIndex), str(excelValues[startDescriptionIdx][unitIdx])) 
+                invoiceItemSheet.write('E' + str(worksheetIndex), articleNo) 
+                invoiceItemSheet.write('F' + str(worksheetIndex), str(excelValues[startDescriptionIdx][unitPriceIdx]))
+                invoiceItemSheet.write('G' + str(worksheetIndex), str(round(excelValues[startDescriptionIdx][amountIdx], 2))) 
+                worksheetIndex += 1
         startDescriptionIdx += 1
     total = str(round(excelValues[endDescriptionIdx][amountIdx], 2))
     grandTotal = total

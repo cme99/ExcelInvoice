@@ -1,6 +1,7 @@
 import re
 import CreateCustomExcel as ccx
 import ConvertDate as cd
+import ConvertOrderNumber as con
 class FuranTradingTmpl():
     if __name__ == "__main__":
         print("Start Furan Trading Template")
@@ -86,11 +87,11 @@ def getDataFromFuranTrading(df, invoiceHeaderSheet, invoiceItem, i):
             # print(str(articleNoIdx))
             # print(str(excelValues[startDescriptionIdx][unitPriceIdx]))
             if str(excelValues[startDescriptionIdx][poNoIdx]) == 'nan':
-                # arr.append(poNo)
                 invoiceItemSheet.write('A' + str(worksheetIndex), poNo)
             else:
-                invoiceItemSheet.write('A' + str(worksheetIndex), str(excelValues[startDescriptionIdx][poNoIdx]))
-                poNo = str(excelValues[startDescriptionIdx][poNoIdx])
+                poNo = con.getOrderNumberValue(str(excelValues[startDescriptionIdx][poNoIdx]))
+                invoiceItemSheet.write('A' + str(worksheetIndex), poNo)
+                
             invoiceItemSheet.write('B' + str(worksheetIndex), str(excelValues[startDescriptionIdx][indexIdx]))
             invoiceItemSheet.write('C' + str(worksheetIndex), str(excelValues[startDescriptionIdx][qtyIdx]))
             invoiceItemSheet.write('D' + str(worksheetIndex), unit)

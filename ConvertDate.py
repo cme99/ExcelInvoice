@@ -11,7 +11,7 @@ def getMonth(month_name):
 
 def getIssueDate(issueDate):
     if (issueDate != '') :
-        findDates = re.findall(r'\w+', issueDate)
+        findDates = re.findall(r'[A-Za-z0-9]+', issueDate)
         if (len(findDates) and len(findDates) ==3) :
             month = getMonth(findDates[0])
             date = findDates[1]

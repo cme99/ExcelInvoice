@@ -61,16 +61,17 @@ def getDataFromZhongShanGuanYiImportExportTrade(df, invoiceHeaderSheet, invoiceI
             isEndDescription = True
             endDescriptionIdx = indexRow
 
-        if re.search(r'(?<=Invoice No :).\w+', info) != None and isInvNoFound == False:
+        if re.search(r'(?<=Invoice No :\s).*(?=\')', info) != None and isInvNoFound == False:
             isInvNoFound = True
-            invNos = re.findall(r'(?<=Invoice No :).\w+', info)
+            invNos = re.findall(r'(?<=Invoice No :\s).*(?=\')', info)
             invNo = ''.join(invNos)
             # invoiceNoIdx = indexRow
             
-        if re.search(r'(?<=Date :).\w+', info) != None and isIssueDateFound == False:
+        if re.search(r'(?<=Date :\s).*(?=\')', info) != None and isIssueDateFound == False:
+            print("Date : " + info)
             isIssueDateFound = True
-            issueDates = re.findall(r'(?<=Date :).*', info)
-            issueDate = removeNoise(''.join(issueDates))
+            issueDates = re.findall(r'(?<=Date :\s).*(?=\')', info)[0]
+            issueDate = ''.join(issueDates)
             # issueDateIdx = indexRow
 
         if isInvNoFound and isIssueDateFound:
@@ -81,8 +82,8 @@ def getDataFromZhongShanGuanYiImportExportTrade(df, invoiceHeaderSheet, invoiceI
     while startDescriptionIdx < endDescriptionIdx:
         poStr = str(excelValues[startDescriptionIdx][poIdx])
         
-        if re.search(r'(?<=PO No.:).*', poStr) != None:
-            info = re.findall(r'(?<=PO No.:).*', poStr)
+        if re.search(r'(?<=PO No.:\s)\d+', poStr) != None:
+            info = re.findall(r'(?<=PO No.:\s)\d+', poStr)
             poNo = ''.join(info).strip()
         else: 
             invoiceItemSheet.write('A' + str(worksheetIndex), poNo)    
