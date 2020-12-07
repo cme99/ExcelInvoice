@@ -48,7 +48,6 @@ def getDataFromWellFresh(df, invoiceHeaderSheet, invoiceItem, i):
             isStartDescription = True
             startDescriptionIdx = indexRow + 1
             indexCol = 0
-            
             while indexCol < len(excelValues[indexRow]):
                 info = str(excelValues[indexRow][indexCol])
                 # print(info)

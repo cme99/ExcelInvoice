@@ -10,7 +10,7 @@ multiChars = "'[]"
 def removeNoise(srcString):
     for character in multiChars:
         srcString = srcString.replace(character, "")
-    return srcString.replace('nan', '')
+    return srcString.replace('nan', '').strip()
 
 def allNan(stringList):
     for string in stringList:
@@ -59,10 +59,11 @@ def getDataFromIMagicKitchenAppliances(df, invoiceHeaderSheet, invoiceItem, i):
             invNos = re.findall(r'(?<=INVOICE NO.:).*', info)
             invNo = ''.join(invNos)
             # invoiceNoIdx = indexRow
-        if re.search(r'(?<=DATE:).*', info) != None and isIssueDateFound == False:
-            # print(info)
+        if re.search(r'(?<=DATE:\s).*', info) != None and isIssueDateFound == False:
+            print(info)
             isIssueDateFound = True
-            issueDates = re.findall(r'(?<=DATE:).*', info)
+            issueDates = re.findall(r'(?<=DATE:\s).*', info)
+            
             issueDate = removeNoise(''.join(issueDates))
             if re.search(r'(?<=datetime.datetime).*', issueDate) != None:
                 issueDates = re.findall(r'\((.*)\)', issueDate)
@@ -137,7 +138,7 @@ def getDataFromIMagicKitchenAppliances(df, invoiceHeaderSheet, invoiceItem, i):
         startDescriptionIdx += 1
     total = str(round(excelValues[endDescriptionIdx][amountIdx], 2))
     grandTotal = total
-
+    print("IMagic : " + str(issueDate))
     invoiceHeaderSheet.write('A' + sheetRow, customerNo)
     invoiceHeaderSheet.write('B' + sheetRow, invNo)
     invoiceHeaderSheet.write('C' + sheetRow, cd.getIssueDateWithoutMonthName(issueDate))
